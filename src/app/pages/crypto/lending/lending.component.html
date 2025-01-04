@@ -1,0 +1,65 @@
+<div class="container-fluid">
+    <app-page-title title="Orders" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+  
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title mb-4">Order Management</h4>
+  
+            <div class="table-responsive">
+              <table class="table table-nowrap align-middle mb-0">
+                <thead>
+                  <tr>
+                   
+                    <th scope="col">Product</th>
+                    
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" colspan="2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let order of orders">
+                   
+                    <td>{{ order.symboleProduit }}</td>
+                    
+                    <td>{{ order.quantite }}</td>
+                    <td>{{ order.prix | currency }}</td>
+                    <td>
+                      <span [ngClass]="{
+                        'badge bg-success': order.etat === 'ACCEPTE',
+                        'badge bg-danger': order.etat === 'REFUSE',
+                        'badge bg-warning': order.etat === 'EN_ATTENTE'
+                      }">{{ order.etat }}</span>
+                    </td>
+                    <td>
+                      <button 
+                        *ngIf="order.etat === 'EN_ATTENTE'" 
+                        (click)="acceptOrder(order.idOrdre)" 
+                        class="btn btn-sm btn-primary">
+                        Accept
+                      </button>
+                    </td>
+                    <td>
+                      <button 
+                        *ngIf="order.etat === 'EN_ATTENTE'" 
+                        (click)="rejectOrder(order.idOrdre)" 
+                        class="btn btn-sm btn-danger">
+                        Reject
+                      </button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="orders.length === 0">
+                    <td colspan="8" class="text-center">No orders found.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

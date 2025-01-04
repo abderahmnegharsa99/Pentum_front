@@ -1,0 +1,26 @@
+.order-card {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+}
+
+.order-card .product-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+}
+
+.alert-info {
+    font-size: 1.1rem;
+    padding: 1rem;
+    border-radius: 8px;
+}

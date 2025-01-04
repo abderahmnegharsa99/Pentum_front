@@ -1,0 +1,159 @@
+<div class="container-fluid">
+    <app-page-title title="Détails de l'Action" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+    <div class="row mt-4">
+        <!-- Section gauche pour les détails de l'action -->
+        <div class="col-md-8">
+            <div *ngIf="action$ | async as action">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-2">
+                            {{ action.symbole }} - {{ action.type }}
+                            <span class="badge bg-primary ms-2">{{ action.exchange }}</span>
+                        </h4>
+                        <p class="text-muted">Marché : {{ action.exchange }} | Devise : {{ action.currency }}</p>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h5 class="text-uppercase">Prix Actuel</h5>
+                                <p class="h4"
+                                   [ngClass]="{'text-success': action.prixActuel > action.prixOuverture, 'text-danger': action.prixActuel < action.prixOuverture}">
+                                    {{ action.prixActuel | currency: action.currency }}
+                                    <i *ngIf="action.prixActuel > action.prixOuverture" class="mdi mdi-arrow-up-bold text-success ms-1"></i>
+                                    <i *ngIf="action.prixActuel < action.prixOuverture" class="mdi mdi-arrow-down-bold text-danger ms-1"></i>
+                                </p>
+
+                                <h5 class="text-uppercase mt-3">Prix Ouverture</h5>
+                                <p>{{ action.prixOuverture | currency: action.currency }}</p>
+
+                                <h5 class="text-uppercase mt-3">Prix Haut</h5>
+                                <p>{{ action.prixHaut | currency: action.currency }}</p>
+
+                                <h5 class="text-uppercase mt-3">Prix Bas</h5>
+                                <p>{{ action.prixBas | currency: action.currency }}</p>
+                            </div>
+
+                            <div class="col-md-6">
+                                <h5 class="text-uppercase">Volume</h5>
+                                <p>{{ action.volume | number }}</p>
+
+                                <h5 class="text-uppercase mt-3">Dernière Mise à Jour</h5>
+                                <p>{{ action.derniereMiseAJour | date: 'short' }}</p>
+
+                                <h5 class="text-uppercase mt-3">Variation du Jour</h5>
+                                <p [ngClass]="{'text-success': action.prixActuel > action.prixOuverture, 'text-danger': action.prixActuel < action.prixOuverture}">
+                                    {{ ((action.prixActuel - action.prixOuverture) / action.prixOuverture) | percent }}
+                                    <i *ngIf="action.prixActuel > action.prixOuverture" class="mdi mdi-arrow-up-bold text-success ms-1"></i>
+                                    <i *ngIf="action.prixActuel < action.prixOuverture" class="mdi mdi-arrow-down-bold text-danger ms-1"></i>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Section pour le graphique interactif de l'historique des prix -->
+                        <div class="mt-4">
+                            <h5 class="text-uppercase">Historique des Prix</h5>
+                            <div id="historique-chart" class="chart-container">
+                                <apx-chart 
+                                    *ngIf="chartOptions" 
+                                    [series]="chartOptions.series" 
+                                    [chart]="chartOptions.chart" 
+                                    [xaxis]="chartOptions.xaxis" 
+                                    [dataLabels]="chartOptions.dataLabels" 
+                                    [stroke]="chartOptions.stroke" 
+                                    [title]="chartOptions.title" 
+                                    [tooltip]="chartOptions.tooltip">
+                                </apx-chart>
+                            </div>
+                        </div>
+
+                        <!-- Button to trigger modal for placing an order -->
+                        <div class="mt-4 text-center">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal" [disabled]="!portefeuille">
+                                Passer un Ordre
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section droite pour les détails du portefeuille -->
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Votre Portefeuille</h5>
+                    <p *ngIf="portefeuille; else noPortefeuille" class="mb-0">
+                        <strong>Montant actuel :</strong> {{ portefeuille.solde | currency }}
+                    </p>
+                    <ng-template #noPortefeuille>
+                        <p class="text-muted">Aucun portefeuille chargé.</p>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!-- Section pour les actualités associées -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="text-uppercase">Actualités Associées</h5>
+                    <div *ngIf="paginatedArticles.length > 0; else noNews">
+                        <ul class="list-unstyled mt-3">
+                            <li *ngFor="let article of paginatedArticles">
+                                <h6><a [href]="article.url" target="_blank">{{ article.title }}</a></h6>
+                                <p class="text-muted">{{ article.description }}</p>
+                                <small class="text-muted">{{ article.publishedAt | date:'short' }}</small>
+                                <hr>
+                            </li>
+                        </ul>
+
+                        <!-- Pagination controls -->
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" [class.disabled]="currentPage === 1">
+                                    <button class="page-link" (click)="changePage(currentPage - 1)">Précédent</button>
+                                </li>
+                                <li class="page-item" *ngFor="let page of pageRange">
+                                    <button class="page-link" [class.active]="currentPage === page" (click)="changePage(page)">
+                                        {{ page }}
+                                    </button>
+                                </li>
+                                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                                    <button class="page-link" (click)="changePage(currentPage + 1)">Suivant</button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <ng-template #noNews>
+                        <p class="text-muted">Aucune actualité disponible pour cette action.</p>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for placing an order -->
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalLabel">Passer un Ordre</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Symbole :</strong> {{ symboleProduit }}</p>
+                    <p><strong>Prix actuel :</strong> {{ (action$ | async)?.prixActuel | currency }}</p>
+
+                    <div class="mb-3">
+                        <label for="quantite" class="form-label">Quantité</label>
+                        <input type="number" id="quantite" class="form-control" [(ngModel)]="quantite" (input)="updateTotal()" min="1">
+                    </div>
+                    <p><strong>Total à payer :</strong> {{ totalAPayer | currency }}</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" (click)="placeOrder()">Confirmer l'Ordre</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

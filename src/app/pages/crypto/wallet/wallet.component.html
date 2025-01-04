@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <app-page-title title="My Orders" [breadcrumbItems]="[{ label: 'Crypto' }, { label: 'Orders', active: true }]"></app-page-title>
+
+    <div class="row">
+        <!-- Loop through orders and use ngIf inside the div to check if orders exist -->
+        <ng-container *ngIf="orders.length > 0; else noOrders">
+            <div class="col-xl-4 col-lg-6 col-md-6 mb-4" *ngFor="let order of orders">
+                <div class="card order-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h5 class="product-name">{{ order.symboleProduit }}</h5>
+                            <span [ngClass]="{
+                                'badge bg-success': order.etat === 'ACCEPTE',
+                                'badge bg-danger': order.etat === 'REFUSE',
+                                'badge bg-warning': order.etat === 'EN_ATTENTE'
+                              }">
+                                {{ order.etat }}
+                            </span>
+                        </div>
+                        <p class="mb-1"><strong>Prix:</strong> {{ order.prix | currency }}</p>
+                        <p class="mb-1"><strong>Quantité:</strong> {{ order.quantite }}</p>
+                        <p class="mb-1"><strong>Prix Total:</strong> {{ (order.prix * order.quantite) | currency }}</p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- If no orders are found, display a message -->
+        <ng-template #noOrders>
+            <div class="col-12 text-center">
+                <div class="alert alert-info mt-3">No orders found.</div>
+            </div>
+        </ng-template>
+    </div>
+</div>

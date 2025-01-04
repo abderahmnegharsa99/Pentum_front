@@ -1,0 +1,101 @@
+<div class="container-fluid">
+  <app-page-title title="Portfolio Dashboard" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+  <!-- Metrics Boxes -->
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="text-uppercase text-muted">Rendement Global</h6>
+          <h4>{{ rendementGlobal | number: '1.2-2' }}%</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="text-uppercase text-muted">Valeur Totale</h6>
+          <h4>{{ totalValue | currency: 'USD' }}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="text-uppercase text-muted">Ratio Gain/Perte</h6>
+          <h4>{{ ratioGainPerte | number: '1.2-2' }}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="text-uppercase text-muted">Liquidité</h6>
+          <h4>{{ liquidite | currency: 'USD' }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profit and Loss Table -->
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-4">Profit et Perte</h4>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Produit</th>
+                  <th>Valeur</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of profitLoss">
+                  <td>{{ item.name }}</td>
+                  <td [class.text-success]="item.value >= 0" [class.text-danger]="item.value < 0">
+                    {{ item.value | currency: 'USD' }}
+                  </td>
+                  <td>
+                    <button class="btn btn-danger btn-sm" (click)="sellProduct(item.name)">Vendre</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie Chart -->
+  <div class="row mt-4">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-4">Poids des Produits</h4>
+          <apx-chart
+            [series]="poidsProduitsSeries"
+            [labels]="poidsProduitsLabels"
+            [chart]="{ type: 'pie', height: 350 }"
+            [colors]="['#34c38f', '#556ee6', '#f46a6a', '#f1b44c']">
+          </apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Liquidité and Totaux -->
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Liquidité : {{ liquidite | currency: 'USD' }}</h5>
+          <h5 class="card-title">Totaux : {{ totalAmount | currency: 'USD' }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
