@@ -63,7 +63,7 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.CHAT.TEXT',
         icon: 'bx-chat',
         link: '/chat',
-        
+
     },
     {
         id: 12,
@@ -205,7 +205,7 @@ export const MENU: MenuItem[] = [
                         id:34,
                         label: 'MENUITEMS.EMAIL.LIST.TEMPLATE.LIST.BASIC',
                         link: '/email/basic',
-                        parentId:30 
+                        parentId:30
                     },
                     {
                         id:35,
@@ -396,7 +396,7 @@ export const MENU: MenuItem[] = [
                         id:64,
                         label: 'MENUITEMS.JOBS.LIST.CANDIDATE.LIST.LIST',
                         link: '/jobs/candidate-list',
-                        parentId:57 
+                        parentId:57
                     },
                     {
                         id:65,
@@ -414,28 +414,28 @@ export const MENU: MenuItem[] = [
         isTitle: true
     },
     {
-        id: 67,
-        label: 'MENUITEMS.AUTHENTICATION.TEXT',
-        icon: 'bx-user-circle',
-        subItems: [
-            {
+          id: 67,
+            label: "MENUITEMS.AUTHENTICATION.TEXT",
+            icon: "bx-user-circle",
+            subItems: [
+              {
                 id: 68,
-                label: 'MENUITEMS.AUTHENTICATION.LIST.LOGIN',
-                link: '/account/login',
-                parentId: 67
-            },
-            {
+                label: "MENUITEMS.AUTHENTICATION.LIST.LOGIN",
+                link: "/account/login",
+                parentId: 67,
+              },
+              {
                 id: 69,
-                label: 'MENUITEMS.AUTHENTICATION.LIST.LOGIN2',
-                link: '/account/login-2',
-                parentId: 67
-            },
-            {
+                label: "MENUITEMS.AUTHENTICATION.LIST.LOGIN2",
+                link: "/account/login-2",
+                parentId: 67,
+              },
+              {
                 id: 70,
-                label: 'MENUITEMS.AUTHENTICATION.LIST.REGISTER',
-                link: '/account/signup',
-                parentId: 67
-            },
+                label: "MENUITEMS.AUTHENTICATION.LIST.REGISTER",
+                link: "/account/signup",
+                parentId: 67,
+              },
             {
                 id: 71,
                 label: 'MENUITEMS.AUTHENTICATION.LIST.REGISTER2',
